@@ -1,15 +1,20 @@
 package com.paginationProj.service;
 
+
+
 import java.util.List;
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+
 import org.springframework.stereotype.Service;
 
 import com.paginationProj.job.Job;
 import com.paginationProj.repository.JobRepository;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,25 +23,39 @@ public class JobService {
 	
 	private final JobRepository repository;
 	
+	public List<Job> getAllJOb() {
+		return repository.findAll();
+	}
+
+	public List<Job> findByField(String field) {
+		return repository.findAll(Sort.by(Sort.Direction.ASC,field));
+	}
+
+	public Page<Job> findAllJobBySize(int offset, int pageSize) {
+		return repository.findAll(PageRequest.of(offset, pageSize));
+			
+	}
+
+	public Page<Job> findPaginationWithSort(int offset, int pageSize, String field) {
+		return repository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
+	}
 	
-	  public List<Job> findAllProducts() {
-	        return repository.findAll();
-	    }
+	public Page<Job> findAllJobs(PageRequest pageRequest) {
+	    return repository.findAll(pageRequest);
+	}
 
-
-	    public List<Job> findProductsWithSorting(String field){
-	        return  repository.findAll(Sort.by(Sort.Direction.ASC,field));
-	    }
-
-
-	    public Page<Job> findProductsWithPagination(int offset,int pageSize){
-	        Page<Job> products = repository.findAll(PageRequest.of(offset, pageSize));
-	        return  products;
-	    }
-
-	    public Page<Job> findProductsWithPaginationAndSorting(int offset,int pageSize,String field){
-	        Page<Job> products = repository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
-	        return  products;
-	    }
+	public Page<Job> findPaginationWithSort(PageRequest pageRequest) {
+	    return repository.findAll(pageRequest);
+	}
+	
+//	@PostConstruct
+//	public void initDB() {
+//	    Random random = new Random();
+//	    List<Job> jobs = IntStream.rangeClosed(1, 30)
+//	            .mapToObj(i -> new Job("job" + i, "description", "company", random.nextInt(5000)))
+//	            .collect(Collectors.toList());
+//
+//	    repository.saveAll(jobs);
+//	}
 
 }

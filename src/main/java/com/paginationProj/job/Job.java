@@ -6,8 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Table(name = "job")
 public class Job {
 
@@ -25,6 +31,13 @@ public class Job {
 	private String company;
 	
 	@Column(name = "salary")
-    private Double salary;
+    private int salary;
+	
+	 public Job(String jobTitle, String description, String company, int salary) {
+	        this.jobTitle = jobTitle;
+	        this.description = description;
+	        this.company = company;
+	        this.salary = salary;
+	    }
 
 }
